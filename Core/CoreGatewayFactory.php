@@ -3,6 +3,7 @@
 namespace HeyPay\Bundle\PayBundle\Core;
 
 use HeyPay\Bundle\PayBundle\Core\Action\CapturePaymentAction;
+use HeyPay\Bundle\PayBundle\Core\Action\ConvertAction;
 use HeyPay\Bundle\PayBundle\Core\Action\PrependActionInterface;
 use HeyPay\Bundle\PayBundle\Core\Bridge\PlainPhp\Action\GetHttpRequestAction;
 use HeyPay\Bundle\PayBundle\Core\DI\ContainerConfiguration;

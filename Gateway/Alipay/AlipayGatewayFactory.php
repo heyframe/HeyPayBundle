@@ -7,6 +7,7 @@ use DI\Container;
 use HeyPay\Bundle\PayBundle\Core\Bridge\Spl\ArrayObject;
 use HeyPay\Bundle\PayBundle\Core\GatewayFactory;
 use HeyPay\Bundle\PayBundle\Gateway\Alipay\Action\CapturePcAction;
+use HeyPay\Bundle\PayBundle\Gateway\Alipay\Action\ConvertPaymentAction;
 use HeyPay\Bundle\PayBundle\Gateway\Alipay\Action\StatusAction;
 
 class AlipayGatewayFactory extends GatewayFactory
@@ -16,6 +17,7 @@ class AlipayGatewayFactory extends GatewayFactory
         return [
             StatusAction::class,
             CapturePcAction::class,
+            ConvertPaymentAction::class,
         ];
     }
 
@@ -25,7 +27,7 @@ class AlipayGatewayFactory extends GatewayFactory
             AlipayApi::class => function (Container $container) {
                 $sandbox = $container->get('sandbox');
                 $alipayConfig = new AlipayConfig();
-                $alipayConfig->setServerUrl('https://openapi-sandbox.dl.alipaydev.com');
+                $alipayConfig->setServerUrl($sandbox ? 'https://openapi-sandbox.dl.alipaydev.com' : 'https://openapi.alipay.com');
                 $alipayConfig->setAppId($container->get('app_id'));
                 $alipayConfig->setPrivateKey($container->get('private_key'));
                 $alipayConfig->setAlipayPublicKey($container->get('alipay_public_key'));
