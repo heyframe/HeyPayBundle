@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults public="true"/>
+
+        <service id="pay.builder" class="HeyPay\Bundle\PayBundle\Core\PayBuilder" public="false">
+            <call method="setMainRegistry">
+                <argument type="service" id="pay.static_registry"/>
+            </call>
+            <call method="setTokenStorage">
+                <argument type="service" id="pay.security.token_storage"/>
+            </call>
+            <call method="setCoreGatewayFactory">
+                <argument type="service" id="pay.core_gateway_factory_builder" />
+            </call>
+        </service>
+
+        <service id="pay" class="HeyPay\Bundle\PayBundle\Core\Pay" lazy="true">
+            <factory service="pay.builder" method="getPay" />
+        </service>
+
+        <service id="HeyPay\Bundle\PayBundle\Core\Pay" alias="pay"/>
+
+        <service id="pay.static_registry" class="HeyPay\Bundle\PayBundle\ContainerAwareRegistry">
+            <argument type="collection"/> <!-- gateways services. this should be replaced while container is built -->
+            <argument type="collection"/> <!-- storages services. this should be replaced while container is built -->
+            <argument type="collection"/> <!-- gateways factories services. this should be replaced while container is built -->
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="pay.core_gateway_factory_builder" class="HeyPay\Bundle\PayBundle\Builder\CoreGatewayFactoryBuilder" public="false"/>
+
+        <service id="pay.security.token_storage" abstract="true" />
+
+
+        <service id="pay.extension.storage.prototype" class="HeyPay\Bundle\PayBundle\Core\Extension\StorageExtension" abstract="true" public="false">
+            <argument/> <!-- this should be replaced with real storage service -->
+        </service>
+
+        <service id="pay.action.get_http_request" class="HeyPay\Bundle\PayBundle\Action\GetHttpRequestAction">
+            <call method="setHttpRequestStack">
+                <argument type="service" id="request_stack" />
+            </call>
+        </service>
+
+        <service id="pay.converter.reply_to_http_response" class="HeyPay\Bundle\PayBundle\ReplyToSymfonyResponseConverter" />
+
+        <service id="pay.listener.reply_to_http_response" class="HeyPay\Bundle\PayBundle\EventListener\ReplyToHttpResponseListener">
+            <argument type="service" id="pay.converter.reply_to_http_response" />
+
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="128" />
+        </service>
+
+    </services>
+</container>
