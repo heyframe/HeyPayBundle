@@ -2,8 +2,10 @@
 
 namespace HeyPay\Bundle\PayBundle\Tests;
 
+use HeyPay\Bundle\PayBundle\Core\Model\Payment;
 use HeyPay\Bundle\PayBundle\Core\Pay;
 use HeyPay\Bundle\PayBundle\Core\PayBuilder;
+use HeyPay\Bundle\PayBundle\Core\Request\Capture;
 use HeyPay\Bundle\PayBundle\Core\Storage\FilesystemStorage;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;

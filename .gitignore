@@ -4,7 +4,8 @@ vendor
 bin
 .phpunit.result.cache
 .idea
-
+Tests/Integration/
 *.cache
 var/
 .env
+
