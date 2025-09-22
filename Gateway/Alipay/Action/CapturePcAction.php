@@ -14,11 +14,18 @@ class CapturePcAction implements ActionInterface
 
     public function execute(mixed $request): void
     {
-
     }
 
     public function supports(mixed $request): bool
     {
-        return $request instanceof Capture && $request->getModel() instanceof \ArrayAccess;
+        if (!$request instanceof Capture) {
+            return false;
+        }
+
+        $model = $request->getModel();
+
+        return $model instanceof \ArrayAccess
+            && isset($model['biz_content']['product_code'])
+            && $model['biz_content']['product_code'] === 'FAST_INSTANT_TRADE_PAY';
     }
 }

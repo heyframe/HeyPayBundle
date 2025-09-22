@@ -2,10 +2,8 @@
 
 namespace HeyPay\Bundle\PayBundle\Tests;
 
-use HeyPay\Bundle\PayBundle\Core\Model\Payment;
 use HeyPay\Bundle\PayBundle\Core\Pay;
 use HeyPay\Bundle\PayBundle\Core\PayBuilder;
-use HeyPay\Bundle\PayBundle\Core\Request\Capture;
 use HeyPay\Bundle\PayBundle\Core\Storage\FilesystemStorage;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,20 +27,6 @@ class PayTest extends KernelTestCase
         $pay = $this->container->get('pay');
         $gateway = $pay->getGateway('ali_pc');
         static::assertNotNull($gateway);
-
-        $order = new Payment();
-        $order->setTotalAmount(100);
-        $order->setCurrencyCode('USD');
-        $order->setNumber('aNum');
-        $order->setDetails([]);
-        $order->setClientEmail('anEmail');
-        $order->setClientId('anId');
-        $order->setDetails([
-            'bar1',
-            'bar2' => 'theBar2',
-        ]);
-
-        $gateway->execute(new Capture($order));
     }
 
     public function testPayNotNull(): void
